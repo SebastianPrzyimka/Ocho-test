@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* Placeholder palette and fonts. The real design direction is still to be chosen. */
+:root {
+  --background: #faf7f2;
+  --foreground: #231f1b;
+  --muted: #6b635b;
+  --accent: #b4532a;
+  --line: #e4ddd2;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-line: var(--line);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}

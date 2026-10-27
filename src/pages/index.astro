@@ -67,44 +67,15 @@ const mosaic: { id: PhotoId; cls: string; tone: "navy" | "sand" | "linen" | "mid
         </p>
       </div>
 
-      <div class="relative lg:col-span-6" data-reveal style="--reveal-delay:2">
-        <div class="relative ml-auto w-[88%] sm:w-[78%] lg:w-[86%]">
-          <Photo
-            id="heroBrunch"
-            aspect="4 / 5"
-            priority
-            parallax
-            label="center"
-            sizes="(min-width: 1024px) 42vw, 88vw"
-            class="rounded-t-[14rem] rounded-b-md"
-          />
-          <!-- Rotating stamp -->
-          <div class="stamp absolute -top-6 -left-10 size-28 text-navy sm:-left-14 sm:size-36" aria-hidden="true">
-            <svg viewBox="0 0 120 120" class="stamp__text size-full">
-              <defs>
-                <path id="stamp-circle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"></path>
-              </defs>
-              <circle cx="60" cy="60" r="58" class="fill-ivory"></circle>
-              <text class="fill-current font-sans text-[10.5px] font-bold tracking-[0.28em] uppercase">
-                <textPath href="#stamp-circle" textLength="286" lengthAdjust="spacing">Fresh · Local · Home made ·</textPath>
-              </text>
-            </svg>
-            <svg viewBox="0 0 120 120" class="absolute inset-0 size-full">
-              <circle cx="60" cy="60" r="16" fill="none" stroke="currentColor" stroke-width="5"></circle>
-            </svg>
-          </div>
-        </div>
-        <div class="absolute -bottom-10 left-0 w-[46%] sm:w-[40%] lg:-left-6 lg:w-[42%]">
-          <Photo
-            id="canalView"
-            aspect="1 / 1"
-            tone="sand"
-            compact
-            label="center"
-            sizes="(min-width: 1024px) 18vw, 45vw"
-            class="rounded-full ring-8 ring-ivory"
-          />
-        </div>
+      <div class="lg:col-span-6" data-reveal style="--reveal-delay:2">
+        <Photo
+          id="heroBrunch"
+          aspect="4 / 5"
+          priority
+          parallax
+          sizes="(min-width: 1024px) 42vw, 100vw"
+          class="ml-auto w-full sm:w-[80%] lg:w-[86%] rounded-t-[14rem] rounded-b-md"
+        />
       </div>
     </div>
   </section>
@@ -272,21 +243,3 @@ const mosaic: { id: PhotoId; cls: string; tone: "navy" | "sand" | "linen" | "mid
 
   <CtaBand />
 </BaseLayout>
-
-<style>
-  /* The stamp turns as the page scrolls (no endless animation). */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: scroll()) {
-      .stamp__text {
-        animation: spin linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 120vh;
-      }
-    }
-  }
-  @keyframes spin {
-    to {
-      rotate: 270deg;
-    }
-  }
-</style>

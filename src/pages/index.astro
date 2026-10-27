@@ -1,0 +1,292 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+import Photo from "../components/Photo.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Testimonials from "../components/Testimonials.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { site, fullAddress } from "../config/site";
+import { restaurantSchema } from "../config/schema";
+import type { PhotoId } from "../content/photos";
+
+const highlights: { photo: PhotoId; title: string; text: string; href: string }[] = [
+  {
+    photo: "heroBrunch",
+    title: "Breakfast & brunch",
+    text: "Colourful plates made in our own kitchen.",
+    href: "/menu/#brunch",
+  },
+  { photo: "lunchPlate", title: "Lunch", text: "Home-made lunch, best enjoyed by the water.", href: "/menu/#lunch" },
+  { photo: "coffee", title: "Drinks", text: "Something warm or something cold, whenever you drop in.", href: "/menu/#drinks" },
+  { photo: "cocktail", title: "Cocktails", text: "Fully licensed, with cocktails for brunch and beyond.", href: "/menu/#cocktails" },
+];
+
+const reasons = [
+  { title: "Fresh, local, home made", text: "Three words we cook by. Food is prepared in our own kitchen." },
+  { title: "Brunch and lunch", text: "Come hungry for brunch, or stop by for a relaxed lunch." },
+  { title: "Cocktails, fully licensed", text: "A drink with brunch or a cocktail to round off the afternoon." },
+  { title: "Right on the canal", text: "On the banks of Speirs Wharf, in a building with real history." },
+  { title: "Dogs welcome", text: "We are dog friendly, so bring your four-legged friend along." },
+];
+
+const mosaic: { id: PhotoId; cls: string; tone: "navy" | "sand" | "linen" | "midnight" }[] = [
+  { id: "brunchSpread", cls: "col-span-2 row-span-2 md:col-span-3", tone: "navy" },
+  { id: "shopfront", cls: "md:col-span-2", tone: "sand" },
+  { id: "cocktail", cls: "md:row-span-2", tone: "midnight" },
+  { id: "interiorBar", cls: "md:col-span-2", tone: "linen" },
+  { id: "wharfEvening", cls: "col-span-2 md:col-span-3", tone: "navy" },
+  { id: "sweetPlate", cls: "md:col-span-3", tone: "sand" },
+];
+---
+
+<BaseLayout description={site.description} jsonLd={[restaurantSchema(Astro.site)]}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden pt-8 pb-16 md:pt-14 md:pb-24" aria-labelledby="hero-title">
+    <div class="container-x grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-6 xl:col-span-6">
+        <p class="eyebrow flex items-center gap-3 text-rust" data-reveal>
+          <span class="size-2 rounded-full bg-leaf" aria-hidden="true"></span>
+          {site.tagline.join(" · ")}
+        </p>
+        <h1 id="hero-title" class="display-xl mt-6 text-navy" data-reveal style="--reveal-delay:1">
+          Brunch <span class="block">by the</span>
+          <span class="font-normal text-rust italic">canal.</span>
+        </h1>
+        <p class="mt-8 max-w-lg text-lg leading-relaxed text-muted md:text-xl" data-reveal style="--reveal-delay:2">
+          Ocho is an independent brunch, lunch and cocktail café on the banks of Speirs Wharf, in part of the
+          original 1851 canal-side building. Fully licensed and dog friendly.
+        </p>
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row" data-reveal style="--reveal-delay:3">
+          <Button href="/booktable/" size="lg" arrow>Book a Table</Button>
+          <Button href="/order/" variant="secondary" size="lg">Order Online</Button>
+        </div>
+        <p class="mt-10 text-sm font-semibold text-muted" data-reveal style="--reveal-delay:4">
+          <a href="/visit/" class="underline decoration-sand decoration-2 underline-offset-4 hover:decoration-accent"
+            >{fullAddress}</a
+          >
+        </p>
+      </div>
+
+      <div class="relative lg:col-span-6" data-reveal style="--reveal-delay:2">
+        <div class="relative ml-auto w-[88%] sm:w-[78%] lg:w-[86%]">
+          <Photo
+            id="heroBrunch"
+            aspect="4 / 5"
+            priority
+            parallax
+            label="center"
+            sizes="(min-width: 1024px) 42vw, 88vw"
+            class="rounded-t-[14rem] rounded-b-md"
+          />
+          <!-- Rotating stamp -->
+          <div class="stamp absolute -top-6 -left-10 size-28 text-navy sm:-left-14 sm:size-36" aria-hidden="true">
+            <svg viewBox="0 0 120 120" class="stamp__text size-full">
+              <defs>
+                <path id="stamp-circle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"></path>
+              </defs>
+              <circle cx="60" cy="60" r="58" class="fill-ivory"></circle>
+              <text class="fill-current font-sans text-[10.5px] font-bold tracking-[0.28em] uppercase">
+                <textPath href="#stamp-circle" textLength="286" lengthAdjust="spacing">Fresh · Local · Home made ·</textPath>
+              </text>
+            </svg>
+            <svg viewBox="0 0 120 120" class="absolute inset-0 size-full">
+              <circle cx="60" cy="60" r="16" fill="none" stroke="currentColor" stroke-width="5"></circle>
+            </svg>
+          </div>
+        </div>
+        <div class="absolute -bottom-10 left-0 w-[46%] sm:w-[40%] lg:-left-6 lg:w-[42%]">
+          <Photo
+            id="canalView"
+            aspect="1 / 1"
+            tone="sand"
+            compact
+            label="center"
+            sizes="(min-width: 1024px) 18vw, 45vw"
+            class="rounded-full ring-8 ring-ivory"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facts strip -->
+  <section aria-label="At a glance" class="mt-10 border-y border-navy/15 bg-linen">
+    <ul
+      class="container-x grid grid-cols-2 divide-navy/15 text-center text-sm font-bold tracking-[0.18em] text-navy uppercase md:grid-cols-4 md:divide-x"
+    >
+      <li class="py-5">Brunch</li>
+      <li class="py-5">Lunch</li>
+      <li class="py-5">Cocktails</li>
+      <li class="py-5">Dogs welcome</li>
+    </ul>
+  </section>
+
+  <!-- 01 The Ocho experience -->
+  <section class="py-20 md:py-32" aria-labelledby="experience-title">
+    <div class="container-x grid gap-14 lg:grid-cols-12 lg:gap-10">
+      <div class="lg:col-span-5 lg:pt-10">
+        <SectionHeading number="01" eyebrow="The Ocho experience" title="Easy mornings, long lunches." id="experience-title">
+          <div class="prose-ocho mt-8 max-w-md text-lg leading-relaxed text-muted">
+            <p>
+              Ocho is a relaxed, independent café where the food is made fresh and the welcome is warm. Come for a
+              slow brunch with friends, a catch-up over lunch, or a cocktail by the water.
+            </p>
+            <p>Bring the dog, take the window seat and stay a while.</p>
+          </div>
+        </SectionHeading>
+        <div class="mt-10" data-reveal>
+          <Button href="/about/" variant="secondary" arrow>About Ocho</Button>
+        </div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 lg:col-span-7">
+        <div class="col-span-4" data-reveal>
+          <Photo id="interiorTables" aspect="3 / 4" tone="linen" sizes="(min-width: 1024px) 36vw, 66vw" class="rounded-md" />
+        </div>
+        <div class="col-span-2 flex flex-col justify-end gap-4" data-reveal style="--reveal-delay:2">
+          <div class="rounded-md bg-navy p-4 text-ivory sm:p-6">
+            <p class="font-display text-4xl font-semibold sm:text-6xl">1851</p>
+            <p class="mt-2 text-xs leading-snug text-sand sm:text-sm">
+              Our home is part of the original heritage building at Speirs Wharf.
+            </p>
+          </div>
+          <Photo id="dogFriendly" aspect="3 / 4" tone="sand" compact sizes="(min-width: 1024px) 18vw, 33vw" class="rounded-md" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Food highlights -->
+  <section class="bg-navy py-20 text-ivory md:py-32" aria-labelledby="food-title">
+    <div class="container-x">
+      <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <SectionHeading number="02" eyebrow="From our kitchen" title="Made fresh, plated with colour." tone="light" id="food-title" />
+        <div data-reveal>
+          <Button href="/menu/" variant="outline-light" arrow>See the menu</Button>
+        </div>
+      </div>
+      <ul
+        class="-mx-5 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 lg:grid-cols-4"
+      >
+        {
+          highlights.map((h, i) => (
+            <li class:list={["w-[78%] shrink-0 snap-start md:w-auto", i % 2 === 1 && "lg:mt-16"]} data-reveal style={`--reveal-delay:${i}`}>
+              <a href={h.href} class="group block">
+                <Photo
+                  id={h.photo}
+                  aspect="4 / 5"
+                  tone={i % 2 ? "midnight" : "sand"}
+                  compact
+                  sizes="(min-width: 1024px) 22vw, (min-width: 768px) 45vw, 78vw"
+                  class="rounded-t-full rounded-b-md transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:-translate-y-2"
+                />
+                <p class="mt-5 font-display text-sm text-apricot italic">0{i + 1}</p>
+                <h3 class="mt-1 font-display text-2xl font-semibold group-hover:underline group-hover:decoration-apricot group-hover:underline-offset-4">
+                  {h.title}
+                </h3>
+                <p class="mt-2 text-sand">{h.text}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 Our story -->
+  <section class="py-20 md:py-32" aria-labelledby="story-title">
+    <div class="container-x">
+      <div class="relative">
+        <Photo
+          id="canalView"
+          aspect="16 / 9"
+          tone="navy"
+          parallax
+          sizes="(min-width: 1344px) 1264px, 100vw"
+          class="rounded-md max-md:aspect-[4/5]!"
+        />
+        <div
+          class="relative z-10 -mt-24 ml-4 max-w-xl rounded-md bg-ivory p-8 shadow-[0_30px_60px_-30px_rgb(10_34_52/0.35)] sm:ml-10 md:-mt-40 md:p-12 lg:ml-auto lg:mr-12"
+          data-reveal
+        >
+          <SectionHeading number="03" eyebrow="Our story" title="On the banks of Speirs Wharf." id="story-title" size="md" />
+          <p class="mt-6 text-lg leading-relaxed text-muted">
+            Ocho is part of the original 1851 heritage building at Speirs Wharf, right on the canal in Glasgow. Behind
+            the navy shopfront you'll find a café that is proud to be independent and proud to be local.
+          </p>
+          <div class="mt-8">
+            <Button href="/about/" variant="secondary" arrow>Read our story</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Why Ocho -->
+  <section class="bg-linen py-20 md:py-32" aria-labelledby="why-title">
+    <div class="container-x grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <div class="lg:sticky lg:top-32">
+          <SectionHeading number="04" eyebrow="Why Ocho" title="Good food, good company, by the water." id="why-title" />
+        </div>
+      </div>
+      <ol class="lg:col-span-7">
+        {
+          reasons.map((r, i) => (
+            <li class="grid grid-cols-[3.5rem_1fr] gap-4 border-t border-navy/20 py-8 last:border-b md:grid-cols-[5rem_1fr]" data-reveal>
+              <span class="font-display text-3xl text-rust italic md:text-4xl" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3 class="font-display text-2xl font-semibold text-navy md:text-3xl">{r.title}</h3>
+                <p class="mt-2 max-w-md text-muted">{r.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 05 Gallery preview -->
+  <section class="py-20 md:py-32" aria-labelledby="gallery-title">
+    <div class="container-x">
+      <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <SectionHeading number="05" eyebrow="Gallery" title="A look inside." id="gallery-title" />
+        <div data-reveal>
+          <Button href="/gallery/" variant="secondary" arrow>View the gallery</Button>
+        </div>
+      </div>
+      <div class="mt-14 grid auto-rows-[9rem] grid-cols-2 gap-3 sm:auto-rows-[12rem] md:grid-cols-6 md:gap-4 lg:auto-rows-[15rem]">
+        {
+          mosaic.map((m, i) => (
+            <div class={m.cls} data-reveal style={`--reveal-delay:${i % 3}`}>
+              <Photo id={m.id} tone={m.tone} compact sizes="(min-width: 768px) 50vw, 50vw" class="h-full rounded-md" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Testimonials />
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  /* The stamp turns as the page scrolls (no endless animation). */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .stamp__text {
+        animation: spin linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 120vh;
+      }
+    }
+  }
+  @keyframes spin {
+    to {
+      rotate: 270deg;
+    }
+  }
+</style>

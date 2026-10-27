@@ -1,0 +1,34 @@
+---
+import Button from "./Button.astro";
+import { site } from "../config/site";
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = "Pull up a chair by the canal.",
+  text = "Book a table for brunch or lunch, or order online and enjoy Ocho at home.",
+} = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-navy text-ivory" aria-labelledby="cta-title">
+  <svg
+    class="pointer-events-none absolute -right-24 -bottom-40 w-[34rem] text-ivory/5 md:w-[46rem]"
+    viewBox="0 0 100 100"
+    aria-hidden="true"
+  >
+    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="12"></circle>
+  </svg>
+  <div class="container-x relative grid gap-10 py-20 md:py-28 lg:grid-cols-12 lg:items-end">
+    <div class="lg:col-span-7" data-reveal>
+      <p class="eyebrow text-apricot">{site.tagline.join(" · ")}</p>
+      <h2 id="cta-title" class="display-lg mt-5">{title}</h2>
+      <p class="mt-6 max-w-xl text-lg text-sand">{text}</p>
+    </div>
+    <div class="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end" data-reveal style="--reveal-delay:2">
+      <Button href="/booktable/" variant="accent" size="lg" arrow>Book a Table</Button>
+      <Button href="/order/" variant="outline-light" size="lg">Order Online</Button>
+    </div>
+  </div>
+</section>

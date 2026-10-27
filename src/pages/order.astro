@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import FlipdishEmbed from "../components/FlipdishEmbed.astro";
+import Button from "../components/Button.astro";
+import { site } from "../config/site";
+---
+
+<BaseLayout
+  title="Order Online"
+  description="Order Ocho's fresh, home-made food online from Speirs Wharf, Glasgow. Ordering is powered by Flipdish."
+  hideMobileActions
+>
+  <PageHero
+    eyebrow="Order online"
+    title="Ocho, to take home."
+    intro="Fresh, local, home made, ready when you are. Choose your food below and pay through our ordering partner, Flipdish."
+  />
+
+  <!-- Full-width ordering area: the Flipdish widget needs plenty of room. -->
+  <section class="bg-linen py-10 md:py-16" aria-labelledby="ordering-title">
+    <div class="container-x">
+      <h2 id="ordering-title" class="sr-only">Online ordering</h2>
+      <FlipdishEmbed />
+    </div>
+  </section>
+
+  <section class="py-16 md:py-20" aria-label="Help with your order">
+    <div class="container-x grid gap-8 md:grid-cols-3">
+      <div class="rounded-md border border-navy/15 p-8">
+        <h2 class="font-display text-2xl font-semibold text-navy">Questions about an order?</h2>
+        <p class="mt-3 text-muted">
+          Call us on <a class="font-bold text-navy underline underline-offset-4" href={`tel:${site.phone.e164}`}>{site.phone.display}</a>.
+        </p>
+      </div>
+      <div class="rounded-md border border-navy/15 p-8">
+        <h2 class="font-display text-2xl font-semibold text-navy">Allergies</h2>
+        <p class="mt-3 text-muted">Please tell us about any allergies before you order.</p>
+      </div>
+      <div class="rounded-md bg-navy p-8 text-ivory">
+        <h2 class="font-display text-2xl font-semibold">Rather eat in?</h2>
+        <p class="mt-3 text-sand">Book a table and join us by the canal.</p>
+        <Button href="/booktable/" variant="accent" class="mt-6" arrow>Book a Table</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

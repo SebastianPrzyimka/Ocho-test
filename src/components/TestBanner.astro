@@ -1,0 +1,11 @@
+---
+import { isProduction } from "../config/site";
+---
+
+{
+  !isProduction && (
+    <aside aria-label="Test build notice" class="bg-black px-4 py-2 text-center text-xs font-semibold text-white">
+      Private test build. This is not the real Ocho website.
+    </aside>
+  )
+}

@@ -1,0 +1,70 @@
+---
+/**
+ * Shows a photo from the library in src/content/photos.ts.
+ * Real photos get responsive AVIF/WebP versions; missing ones show a labelled placeholder.
+ * The wrapper always reserves the right space, so the page never jumps while loading.
+ */
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import DevPlaceholder from "./DevPlaceholder.astro";
+import { photos, type Photo as PhotoData, type PhotoId } from "../content/photos";
+
+interface Props {
+  id: PhotoId;
+  /** CSS aspect ratio, e.g. "4 / 5". Omit when the parent sets the height. */
+  aspect?: string;
+  sizes?: string;
+  priority?: boolean;
+  tone?: "navy" | "sand" | "linen" | "midnight";
+  compact?: boolean;
+  label?: "bottom" | "top-end" | "center";
+  parallax?: boolean;
+  /** "contain" shows the whole photo (used in the lightbox). */
+  fit?: "cover" | "contain";
+  class?: string;
+}
+
+const {
+  id,
+  aspect,
+  sizes = "(min-width: 1024px) 50vw, 100vw",
+  priority = false,
+  tone,
+  compact,
+  label,
+  parallax = false,
+  fit = "cover",
+  class: className,
+} = Astro.props;
+
+const files = import.meta.glob<{ default: ImageMetadata }>("../assets/photos/*.{jpg,jpeg,png,webp,avif}", {
+  eager: true,
+});
+
+const photo: PhotoData = photos[id];
+const image = photo.file ? files[`../assets/photos/${photo.file}`]?.default : undefined;
+if (photo.file && !image) {
+  throw new Error(`Photo "${id}": file src/assets/photos/${photo.file} was not found.`);
+}
+---
+
+<div class:list={["relative overflow-hidden", className]} style={aspect ? `aspect-ratio: ${aspect}` : undefined}>
+  {
+    image ? (
+      <Picture
+        src={image}
+        alt={photo.alt}
+        widths={[480, 800, 1200, 1600, 2000].filter((w) => w <= image.width)}
+        sizes={sizes}
+        formats={["avif", "webp"]}
+        loading={priority ? "eager" : "lazy"}
+        fetchpriority={priority ? "high" : "auto"}
+        decoding="async"
+        class:list={["absolute inset-x-0 w-full", fit === "contain" ? "object-contain" : "object-cover", parallax ? "-top-[4%] h-[108%]" : "inset-y-0 h-full"]}
+        data-parallax={parallax ? "" : undefined}
+      />
+    ) : (
+      <DevPlaceholder alt={photo.alt} brief={photo.brief} tone={tone} compact={compact} label={label} />
+    )
+  }
+</div>

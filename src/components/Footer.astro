@@ -1,0 +1,100 @@
+---
+import Wordmark from "./Wordmark.astro";
+import HoursTable from "./HoursTable.astro";
+import { site, nav, legalNav, fullAddress, isProduction } from "../config/site";
+import { diningHours } from "../content/hours";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-midnight text-ivory">
+  <div class="container-x grid gap-12 py-16 md:grid-cols-12 md:py-20">
+    <div class="md:col-span-5">
+      <Wordmark class="text-3xl" />
+      <p class="eyebrow mt-4 text-apricot">{site.tagline.join(" · ")}</p>
+      <p class="mt-6 max-w-sm text-sand">
+        Brunch, lunch and cocktails on the canal at Speirs Wharf. Fully licensed and dog friendly.
+      </p>
+      <address class="mt-8 not-italic leading-relaxed">
+        {fullAddress}<br />
+        <a class="underline decoration-apricot underline-offset-4 hover:text-apricot" href={`tel:${site.phone.e164}`}>
+          {site.phone.display}
+        </a>
+        <br />
+        {
+          site.email ? (
+            <a class="underline underline-offset-4" href={`mailto:${site.email}`}>
+              {site.email}
+            </a>
+          ) : (
+            <span class="tbc mt-2 text-sand">Email to be confirmed</span>
+          )
+        }
+      </address>
+    </div>
+
+    <div class="md:col-span-4">
+      <h2 class="eyebrow text-apricot">Dining hours</h2>
+      <HoursTable hours={diningHours} tone="light" class="mt-4 max-w-xs" />
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 md:col-span-3 md:grid-cols-1">
+      <nav aria-label="Footer">
+        <h2 class="eyebrow text-apricot">Explore</h2>
+        <ul class="mt-4 space-y-2 text-sm">
+          {
+            [...nav, { href: "/booktable/", label: "Book a Table" }, { href: "/order/", label: "Order Online" }].map(
+              (item) => (
+                <li>
+                  <a class="inline-block py-1 hover:text-apricot" href={item.href}>
+                    {item.label}
+                  </a>
+                </li>
+              ),
+            )
+          }
+        </ul>
+      </nav>
+      <div>
+        <h2 class="eyebrow text-apricot">Follow</h2>
+        <ul class="mt-4 space-y-2 text-sm">
+          {
+            site.social.map((s) => (
+              <li>
+                {s.url ? (
+                  <a class="inline-block py-1 hover:text-apricot" href={s.url} rel="noopener noreferrer" target="_blank">
+                    {s.label}
+                    <span class="sr-only"> (opens in a new tab)</span>
+                  </a>
+                ) : (
+                  <span class="text-sand">
+                    {s.label} <span class="tbc">link tbc</span>
+                  </span>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-ivory/15">
+    <div class="container-x flex flex-col gap-4 py-6 text-xs text-mist md:flex-row md:items-center md:justify-between">
+      <p>
+        © {year} Ocho Glasgow. {!isProduction && "Private test build, not the real Ocho website."}
+      </p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        {
+          legalNav.map((item) => (
+            <li>
+              <a class="inline-block py-1 hover:text-ivory" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>

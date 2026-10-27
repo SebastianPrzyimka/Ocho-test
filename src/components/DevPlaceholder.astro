@@ -1,0 +1,111 @@
+---
+/**
+ * Stand-in for a photo that the owner has not supplied yet.
+ * It is clearly labelled, keeps the final aspect ratio (no layout shift) and still
+ * gives screen readers the photo's description.
+ */
+interface Props {
+  alt: string;
+  brief: string;
+  tone?: "navy" | "sand" | "linen" | "midnight";
+  compact?: boolean;
+  /** Where the label sits, so it is not hidden by overlapping elements. */
+  label?: "bottom" | "top-end" | "center";
+}
+const { alt, brief, tone = "navy", compact = false, label = "bottom" } = Astro.props;
+---
+
+<div class:list={["ph", `ph--${tone}`, `ph--label-${label}`]} role="img" aria-label={`Photo placeholder: ${alt}`}>
+  <svg class="ph__ring" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="9"></circle>
+  </svg>
+  <div class:list={["ph__label", compact && "ph__label--compact"]} aria-hidden="true">
+    <span class="ph__tag">Photo to come</span>
+    {!compact && <span class="ph__brief">{brief}</span>}
+  </div>
+</div>
+
+<style>
+  .ph {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    background-repeat: repeat;
+    background-size: 120px 24px;
+  }
+  .ph--navy {
+    background-color: var(--color-navy);
+    color: var(--color-ivory);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24'%3E%3Cpath d='M0 12 Q15 5 30 12 T60 12 T90 12 T120 12' fill='none' stroke='%23F6F1E9' stroke-opacity='.08' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+  .ph--midnight {
+    background-color: var(--color-midnight);
+    color: var(--color-ivory);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24'%3E%3Cpath d='M0 12 Q15 5 30 12 T60 12 T90 12 T120 12' fill='none' stroke='%23F6F1E9' stroke-opacity='.07' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+  .ph--sand {
+    background-color: var(--color-sand);
+    color: var(--color-navy);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24'%3E%3Cpath d='M0 12 Q15 5 30 12 T60 12 T90 12 T120 12' fill='none' stroke='%23102F46' stroke-opacity='.1' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+  .ph--linen {
+    background-color: var(--color-linen);
+    color: var(--color-navy);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24'%3E%3Cpath d='M0 12 Q15 5 30 12 T60 12 T90 12 T120 12' fill='none' stroke='%23102F46' stroke-opacity='.08' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+  .ph--label-top-end {
+    align-items: flex-start;
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .ph--label-top-end .ph__tag {
+    align-self: flex-end;
+  }
+  .ph--label-center {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .ph--label-center .ph__label {
+    translate: 0 2.2rem;
+  }
+  .ph--label-center .ph__tag {
+    align-self: center;
+  }
+  .ph__ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(42%, 9rem);
+    translate: -50% -60%;
+    opacity: 0.14;
+  }
+  .ph__label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.1rem;
+    max-width: 26rem;
+  }
+  .ph__label--compact {
+    padding: 0.65rem 0.75rem;
+  }
+  .ph__tag {
+    align-self: flex-start;
+    border: 1px dashed currentColor;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .ph__brief {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+</style>

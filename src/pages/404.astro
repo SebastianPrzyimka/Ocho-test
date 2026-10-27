@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+---
+
+<BaseLayout title="Page not found" description="This page could not be found.">
+  <section class="container-x flex min-h-[60vh] flex-col justify-center py-20">
+    <p class="eyebrow text-rust">Error 404</p>
+    <h1 class="display-xl mt-5 text-navy">Lost on the <span class="font-normal text-rust italic">towpath?</span></h1>
+    <p class="mt-6 max-w-lg text-lg text-muted">We couldn't find that page. It may have moved when our website was updated.</p>
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+      <Button href="/" size="lg" arrow>Back to home</Button>
+      <Button href="/menu/" variant="secondary" size="lg">See the menu</Button>
+    </div>
+  </section>
+</BaseLayout>

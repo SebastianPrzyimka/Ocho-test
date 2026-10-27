@@ -1,12 +1,13 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	// The name must match the project name in the Cloudflare dashboard.
+	// Test deployment only: an assets-only Worker that serves the static build in ./dist.
+	// There is no server code. The name must match the project in the Cloudflare dashboard.
+	// Production is meant to go to Cloudflare Pages by Direct Upload of the same ./dist folder (see README).
 	"name": "ocho-test",
-	"main": ".open-next/worker.js",
 	"compatibility_date": "2026-10-01",
-	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"assets": {
-		"directory": ".open-next/assets",
-		"binding": "ASSETS"
+		"directory": "./dist",
+		"html_handling": "auto-trailing-slash",
+		"not_found_handling": "404-page"
 	}
 }

@@ -1,0 +1,47 @@
+---
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { fullAddress, site } from "../config/site";
+---
+
+<LegalLayout title="Privacy Policy" description="How Ocho Glasgow handles personal information. Draft for review.">
+  <h2>Who we are</h2>
+  <p>
+    This website is run by [LEGAL BUSINESS NAME] trading as Ocho, {fullAddress}. Telephone {site.phone.display}.
+    Email: [EMAIL]. [Company number / ICO registration number if applicable.]
+  </p>
+
+  <h2>What this website collects</h2>
+  <p>
+    This website itself does not ask you to create an account and does not run contact forms. It does not use
+    analytics or advertising tracking at the time of writing. [Update if analytics are added.]
+  </p>
+  <p>Our hosting provider, Cloudflare, processes basic technical data (such as IP addresses) to deliver and protect the site.</p>
+
+  <h2>Online ordering (Flipdish)</h2>
+  <p>
+    Online orders are taken through Flipdish. When you order, Flipdish processes your details (such as name, contact
+    details, address and payment information) to handle your order. Please read Flipdish's own privacy policy.
+    [Confirm the controller/processor relationship with Flipdish.]
+  </p>
+
+  <h2>Table bookings (Dojo)</h2>
+  <p>
+    Table bookings are handled through Dojo. When you book, Dojo processes the details you give it to manage your
+    reservation. Please read Dojo's own privacy policy. [Confirm the controller/processor relationship with Dojo.]
+  </p>
+
+  <h2>Maps</h2>
+  <p>
+    Our "Open in maps" links take you to Google Maps. We do not embed maps on this website, so Google does not load
+    anything until you click the link.
+  </p>
+
+  <h2>Your rights</h2>
+  <p>
+    Under UK data protection law you can ask to see, correct or delete personal information we hold about you, and you
+    can complain to the Information Commissioner's Office (ico.org.uk). Contact us using the details above.
+  </p>
+
+  <h2>Changes</h2>
+  <p>Last updated: [DATE].</p>
+</LegalLayout>

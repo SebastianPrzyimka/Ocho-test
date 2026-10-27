@@ -1,0 +1,36 @@
+---
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { site } from "../config/site";
+---
+
+<LegalLayout title="Accessibility Statement" description="Accessibility of the Ocho Glasgow website. Draft for review.">
+  <h2>Our aim</h2>
+  <p>
+    We want everyone to be able to use this website. It has been designed and built with the Web Content Accessibility
+    Guidelines (WCAG) 2.2 level AA as the target.
+  </p>
+
+  <h2>What we have done</h2>
+  <ul>
+    <li>Pages work with a keyboard, and have a "skip to content" link.</li>
+    <li>Text and buttons have been checked for colour contrast.</li>
+    <li>Photos have text descriptions.</li>
+    <li>Animations are switched off if your device is set to reduce motion.</li>
+    <li>Pages work on small screens and when zoomed in.</li>
+  </ul>
+
+  <h2>Known limitations</h2>
+  <p>
+    Online ordering (Flipdish) and table booking (Dojo) are provided by third parties and shown inside our pages. We
+    cannot fully control how accessible they are. If you have any trouble, please call us and we will help.
+  </p>
+  <p>[Record the results of a full accessibility audit before launch.]</p>
+
+  <h2>Contact us</h2>
+  <p>
+    If something doesn't work for you, call <a href={`tel:${site.phone.e164}`}>{site.phone.display}</a> or email
+    [EMAIL].
+  </p>
+
+  <p>This statement was last reviewed on [DATE].</p>
+</LegalLayout>

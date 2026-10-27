@@ -1,0 +1,39 @@
+---
+import { days, hoursConfirmed, type Hours } from "../content/hours";
+
+interface Props {
+  hours: Hours;
+  tone?: "dark" | "light";
+  class?: string;
+  caption?: string;
+}
+const { hours, tone = "dark", class: className, caption } = Astro.props;
+const confirmed = hoursConfirmed(hours);
+---
+
+<div class={className}>
+  <table class="w-full text-sm">
+    {caption && <caption class="sr-only">{caption}</caption>}
+    <tbody>
+      {
+        days.map((day) => (
+          <tr class:list={["border-b", tone === "dark" ? "border-sand" : "border-ivory/15"]}>
+            <th scope="row" class="py-2 pr-4 text-left font-semibold">
+              {day}
+            </th>
+            <td class:list={["py-2 text-right", hours[day] === null && (tone === "dark" ? "text-muted" : "text-mist")]}>
+              {hours[day] ?? "To be confirmed"}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  {
+    !confirmed && (
+      <p class:list={["mt-3 text-xs", tone === "dark" ? "text-muted" : "text-mist"]}>
+        Opening hours are being confirmed. Please call before visiting.
+      </p>
+    )
+  }
+</div>

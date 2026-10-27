@@ -1,0 +1,101 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import MenuSection from "../components/MenuSection.astro";
+import Button from "../components/Button.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { menu, allergenNote, dietaryLabels } from "../content/menu";
+import { isProduction } from "../config/site";
+
+const hasPlaceholders = menu.some((c) => c.items.some((i) => i.placeholder));
+---
+
+<BaseLayout
+  title="Menu"
+  description="Brunch, lunch, drinks and cocktails at Ocho, Speirs Wharf, Glasgow. Fresh, local and home made, with menus that change with the seasons."
+>
+  <PageHero
+    eyebrow="Menu"
+    title="Fresh, local, home made."
+    intro="Brunch, lunch, drinks and cocktails, made in our own kitchen. Our menus change with the seasons, so dishes and prices may vary."
+  >
+    <div class="mt-9 flex flex-col gap-3 sm:flex-row" data-reveal style="--reveal-delay:3">
+      <Button href="/order/" size="lg" arrow>Order Online</Button>
+      <Button href="/booktable/" variant="secondary" size="lg">Book a Table</Button>
+    </div>
+  </PageHero>
+
+  <nav
+    aria-label="Menu sections"
+    class="sticky top-18 z-20 border-y border-navy/15 bg-ivory/95 lg:top-20"
+  >
+    <ul class="container-x flex gap-2 overflow-x-auto py-3 [scrollbar-width:none]">
+      {
+        menu.map((c) => (
+          <li class="shrink-0">
+            <a
+              href={`#${c.id}`}
+              data-menu-link
+              class="inline-flex min-h-11 items-center rounded-full border border-navy/25 px-4 text-sm font-bold text-navy transition-colors hover:border-navy aria-[current=true]:border-navy aria-[current=true]:bg-navy aria-[current=true]:text-ivory"
+            >
+              {c.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="container-x py-6">
+    {
+      hasPlaceholders && !isProduction && (
+        <p class="my-8 rounded-md border-2 border-dashed border-rust/50 p-5 text-sm text-rust">
+          <strong>Development placeholder:</strong> the current menu, prices and dietary information have not been
+          supplied yet. Edit <code class="font-mono">src/content/menu.ts</code> to add the real menu.
+        </p>
+      )
+    }
+    {menu.map((category, index) => <MenuSection category={category} index={index} />)}
+
+    <aside class="mb-20 grid gap-8 rounded-md bg-linen p-8 md:grid-cols-2 md:p-12" aria-label="Allergens and dietary key">
+      <div>
+        <h2 class="font-display text-2xl font-semibold text-navy">Allergies & dietary needs</h2>
+        <p class="mt-3 text-muted">{allergenNote}</p>
+      </div>
+      <dl class="grid grid-cols-2 gap-3 text-sm">
+        {
+          Object.entries(dietaryLabels).map(([code, label]) => (
+            <div class="flex items-center gap-2">
+              <dt class="rounded-full bg-leaf/10 px-2.5 py-1 text-xs font-bold text-leaf">{code}</dt>
+              <dd>{label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </aside>
+  </div>
+
+  <CtaBand title="Hungry yet?" text="Order online, or book a table and join us by the canal." />
+</BaseLayout>
+
+<script>
+  // Highlight the menu section currently in view.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-menu-link]")];
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        for (const link of links) {
+          const active = link.hash === `#${entry.target.id}`;
+          link.setAttribute("aria-current", String(active));
+          if (active) link.closest("ul")?.scrollTo({ left: link.offsetLeft - 20 });
+        }
+      }
+    },
+    { rootMargin: "-45% 0px -50% 0px" },
+  );
+  for (const link of links) {
+    const section = document.querySelector(link.hash);
+    if (section) io.observe(section);
+  }
+</script>

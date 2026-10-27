@@ -1,0 +1,9 @@
+---
+/** Text wordmark in the spirit of the white OCHO sign. Replace with the owner's logo file when supplied. */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span class:list={["font-sans font-extrabold uppercase tracking-[0.32em]", className]}>Ocho</span>

@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import DojoEmbed from "../components/DojoEmbed.astro";
+import HoursTable from "../components/HoursTable.astro";
+import { site, fullAddress } from "../config/site";
+import { diningHours } from "../content/hours";
+---
+
+<BaseLayout
+  title="Book a Table"
+  description="Book a table at Ocho, Speirs Wharf, Glasgow, for brunch, lunch or cocktails by the canal. Reservations are handled by Dojo."
+  hideMobileActions
+>
+  <PageHero
+    eyebrow="Book a table"
+    title="Save a seat by the canal."
+    intro="Brunch with friends, lunch for two or cocktails to finish the day. Choose a time below and we'll see you at Speirs Wharf."
+  />
+
+  <section class="bg-linen py-10 md:py-16" aria-labelledby="booking-title">
+    <div class="container-x grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-8">
+        <h2 id="booking-title" class="sr-only">Make a reservation</h2>
+        <DojoEmbed />
+      </div>
+      <aside class="space-y-8 lg:col-span-4" aria-label="Visit details">
+        <div class="rounded-md bg-navy p-8 text-ivory">
+          <h2 class="eyebrow text-apricot">Find us</h2>
+          <p class="mt-4 font-display text-2xl leading-snug">{fullAddress}</p>
+          <p class="mt-4">
+            <a class="underline decoration-apricot underline-offset-4" href={`tel:${site.phone.e164}`}>{site.phone.display}</a>
+          </p>
+          <p class="mt-6 text-sm text-sand">Dogs are welcome. Questions about your booking? Give us a call.</p>
+        </div>
+        <div class="rounded-md border border-navy/15 bg-ivory p-8">
+          <h2 class="eyebrow text-rust">Dining hours</h2>
+          <HoursTable hours={diningHours} class="mt-4" caption="Dining hours" />
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

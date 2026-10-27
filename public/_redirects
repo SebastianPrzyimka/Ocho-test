@@ -1,0 +1,11 @@
+# Redirects for old or alternative addresses (301 = permanent).
+# /order and /booktable keep the same address as the current site, so they need no redirect.
+# Before launch, compare with the list of pages on the current live site and add any that changed.
+/contact        /visit/       301
+/contact-us     /visit/       301
+/find-us        /visit/       301
+/about-us       /about/       301
+/menus          /menu/        301
+/book           /booktable/   301
+/book-a-table   /booktable/   301
+/order-online   /order/       301

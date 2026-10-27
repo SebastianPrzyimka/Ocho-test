@@ -1,0 +1,11 @@
+# Security and caching headers. Works on Cloudflare Pages and Workers static assets.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+  Strict-Transport-Security: max-age=31536000
+
+# Fingerprinted build files never change, so they can be cached for a year.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

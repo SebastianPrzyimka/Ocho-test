@@ -1,0 +1,89 @@
+---
+/**
+ * Flipdish web ordering. Renders the official embed only when it is configured in
+ * src/config/integrations.ts; otherwise an obvious "not connected" placeholder.
+ * The Flipdish script is loaded on this page only.
+ */
+import Button from "./Button.astro";
+import { flipdish } from "../config/integrations";
+
+const embed = flipdish.embed;
+---
+
+<div class="rounded-md border border-navy/15 bg-white/70">
+  {
+    embed ? (
+      <div
+        data-flipdish
+        data-src={embed.scriptSrc}
+        data-script-attrs={JSON.stringify(embed.scriptAttributes ?? {})}
+        data-container={embed.containerId}
+        class="relative min-h-[70vh]"
+      >
+        <div data-state="loading" class="flex min-h-[40vh] flex-col items-center justify-center gap-4 p-8 text-center" role="status">
+          <span class="size-10 animate-spin rounded-full border-4 border-sand border-t-navy" aria-hidden="true" />
+          <p class="font-semibold text-navy">Loading the menu…</p>
+        </div>
+        <div data-state="error" hidden class="p-8 text-center" role="alert">
+          <p class="font-display text-2xl font-semibold text-navy">Online ordering couldn't load.</p>
+          <p class="mt-2 text-muted">Please try again in a moment{flipdish.fallbackUrl ? ", or use the link below" : ""}.</p>
+        </div>
+        <div id={embed.containerId} {...embed.containerAttributes} />
+      </div>
+    ) : (
+      <div class="flex min-h-[60vh] flex-col items-center justify-center gap-5 border-2 border-dashed border-rust/40 p-8 text-center md:p-16">
+        <span class="tbc text-rust">Development placeholder</span>
+        <h2 class="display-md max-w-2xl text-navy">Online ordering will appear here.</h2>
+        <p class="max-w-xl text-muted">
+          This test build is not connected to Flipdish, so nothing can be ordered on this page. The official Flipdish
+          ordering widget will fill this space once it is set up for this website.
+        </p>
+      </div>
+    )
+  }
+</div>
+
+{
+  flipdish.fallbackUrl && (
+    <div class="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+      <Button href={flipdish.fallbackUrl} variant="secondary" external arrow>
+        {flipdish.fallbackLabel}
+      </Button>
+      <p class="text-sm text-muted">Ordering is handled by Flipdish.</p>
+    </div>
+  )
+}
+
+<script>
+  const shell = document.querySelector<HTMLElement>("[data-flipdish]");
+  if (shell) {
+    const loading = shell.querySelector<HTMLElement>('[data-state="loading"]')!;
+    const error = shell.querySelector<HTMLElement>('[data-state="error"]')!;
+    const container = document.getElementById(shell.dataset.container!)!;
+    const fail = () => {
+      loading.hidden = true;
+      error.hidden = false;
+    };
+
+    // Hide the loading state as soon as Flipdish puts something in its container.
+    const mo = new MutationObserver(() => {
+      if (container.childElementCount > 0) {
+        loading.hidden = true;
+        error.hidden = true;
+        mo.disconnect();
+        clearTimeout(timer);
+      }
+    });
+    mo.observe(container, { childList: true });
+    const timer = setTimeout(() => container.childElementCount === 0 && fail(), 20000);
+
+    const script = document.createElement("script");
+    script.src = shell.dataset.src!;
+    script.async = true;
+    for (const [k, v] of Object.entries(JSON.parse(shell.dataset.scriptAttrs || "{}") as Record<string, string>)) {
+      script.setAttribute(k, v);
+    }
+    script.onerror = fail;
+    document.body.append(script);
+  }
+</script>

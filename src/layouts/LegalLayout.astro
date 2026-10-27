@@ -1,0 +1,51 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="container-x max-w-3xl! py-14 md:py-20">
+    <p class="eyebrow text-rust">Legal</p>
+    <h1 class="display-lg mt-4 text-navy">{title}</h1>
+    <div class="mt-8 rounded-md border-2 border-dashed border-rust/50 bg-linen p-5 text-sm text-rust" role="note">
+      <strong>Draft for review.</strong> This page is a starting template, not legal advice. It must be checked and
+      completed by Ocho (and a legal adviser where needed) before the site goes live. Items in [brackets] need filling in.
+    </div>
+    <div class="legal mt-10">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal :global(h2) {
+    margin-top: 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+  .legal :global(p),
+  .legal :global(ul) {
+    margin-top: 1rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+  .legal :global(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .legal :global(li + li) {
+    margin-top: 0.4rem;
+  }
+  .legal :global(a) {
+    color: var(--color-navy);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

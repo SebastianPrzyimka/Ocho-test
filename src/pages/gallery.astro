@@ -1,0 +1,228 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import Photo from "../components/Photo.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { galleryPhotos, categoryLabels, type PhotoCategory } from "../content/photos";
+
+const categories = Object.keys(categoryLabels).filter((c) =>
+  galleryPhotos.some((p) => p.category === c),
+) as PhotoCategory[];
+const aspects = ["4 / 5", "1 / 1", "3 / 4", "4 / 3", "3 / 2", "4 / 5", "1 / 1"];
+const tones = ["navy", "sand", "midnight", "linen"] as const;
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Photos of Ocho at Speirs Wharf, Glasgow: brunch and lunch plates, drinks, the café interior, the navy shopfront and the canal."
+>
+  <PageHero
+    eyebrow="Gallery"
+    title="A look around Ocho."
+    intro="Plates, drinks, the café, the shopfront and the canal outside."
+  />
+
+  <section class="container-x pb-20 md:pb-28" aria-label="Photo gallery">
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter photos">
+      <button type="button" class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+      {
+        categories.map((c) => (
+          <button type="button" class="filter-btn" data-filter={c} aria-pressed="false">
+            {categoryLabels[c]}
+          </button>
+        ))
+      }
+    </div>
+    <p class="sr-only" aria-live="polite" data-gallery-status></p>
+
+    <ul class="mt-10 columns-2 gap-3 md:columns-3 md:gap-5" data-gallery>
+      {
+        galleryPhotos.map((p, i) => (
+          <li class="mb-3 break-inside-avoid md:mb-5" data-category={p.category}>
+            <button
+              type="button"
+              class="group relative block w-full overflow-hidden rounded-md text-left"
+              data-open={i}
+            >
+              <Photo
+                id={p.id}
+                aspect={aspects[i % aspects.length]}
+                tone={tones[i % tones.length]}
+                compact
+                sizes="(min-width: 768px) 30vw, 50vw"
+                class="transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.03]"
+              />
+              <span class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-midnight/85 px-4 py-3 text-xs font-bold tracking-wide text-ivory transition-transform duration-500 group-hover:translate-y-0 group-focus-visible:translate-y-0">
+                {categoryLabels[p.category]}
+              </span>
+              <span class="sr-only">, open larger view</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <dialog class="lightbox m-0 h-dvh max-h-none w-full max-w-none bg-midnight/97 p-0 text-ivory" aria-label="Photo viewer" data-lightbox>
+    <div class="flex h-full flex-col">
+      <div class="container-x flex items-center justify-between py-4">
+        <p class="text-sm font-semibold text-sand" data-counter></p>
+        <button type="button" class="lb-btn" data-close>
+          Close
+          <svg class="size-4" viewBox="0 0 16 16" aria-hidden="true"
+            ><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg
+          >
+        </button>
+      </div>
+      <div class="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-20">
+        {
+          galleryPhotos.map((p, i) => (
+            <figure class="slide hidden h-full w-full max-w-5xl flex-col" data-slide={i}>
+              <Photo id={p.id} tone="sand" fit="contain" sizes="(min-width: 1024px) 64rem, 100vw" class="min-h-0 flex-1 rounded-md" />
+              <figcaption class="py-4 text-center text-sm text-sand">
+                {p.caption ?? p.alt}
+                {p.credit && <span class="block text-xs text-mist">Photo: {p.credit}</span>}
+              </figcaption>
+            </figure>
+          ))
+        }
+        <button type="button" class="lb-btn lb-nav left-3 md:left-6" data-prev aria-label="Previous photo">
+          <svg class="size-5" viewBox="0 0 16 16" aria-hidden="true"
+            ><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"></path></svg
+          >
+        </button>
+        <button type="button" class="lb-btn lb-nav right-3 md:right-6" data-next aria-label="Next photo">
+          <svg class="size-5" viewBox="0 0 16 16" aria-hidden="true"
+            ><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"></path></svg
+          >
+        </button>
+      </div>
+      <p class="pb-4 text-center text-xs text-mist">Use the arrow keys to browse and Esc to close.</p>
+    </div>
+  </dialog>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-navy) 30%, transparent);
+    padding: 0 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-navy);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .filter-btn:hover {
+    border-color: var(--color-navy);
+  }
+  .filter-btn[aria-pressed="true"] {
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+    color: var(--color-ivory);
+  }
+  .lightbox::backdrop {
+    background: var(--color-midnight);
+  }
+  .lightbox .slide.is-active {
+    display: flex;
+  }
+  .lb-btn {
+    display: inline-flex;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    border: 2px solid color-mix(in srgb, var(--color-ivory) 60%, transparent);
+    padding: 0 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    background: var(--color-midnight);
+  }
+  .lb-btn:hover {
+    background: var(--color-ivory);
+    color: var(--color-navy);
+  }
+  .lb-nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    padding: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox .slide.is-active {
+      animation: fade 0.4s var(--ease-out-soft);
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+      scale: 0.98;
+    }
+  }
+</style>
+
+<script>
+  const items = [...document.querySelectorAll<HTMLLIElement>("[data-gallery] > li")];
+  const filters = [...document.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+  const status = document.querySelector<HTMLElement>("[data-gallery-status]");
+  const dialog = document.querySelector<HTMLDialogElement>("[data-lightbox]")!;
+  const slides = [...dialog.querySelectorAll<HTMLElement>("[data-slide]")];
+  const counter = dialog.querySelector<HTMLElement>("[data-counter]")!;
+
+  // Filtering
+  for (const btn of filters) {
+    btn.addEventListener("click", () => {
+      const f = btn.dataset.filter;
+      filters.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      let shown = 0;
+      for (const li of items) {
+        const match = f === "all" || li.dataset.category === f;
+        li.hidden = !match;
+        if (match) shown++;
+      }
+      if (status) status.textContent = `Showing ${shown} photo${shown === 1 ? "" : "s"}`;
+    });
+  }
+
+  // Lightbox (browses only the photos visible under the current filter)
+  let order: number[] = [];
+  let pos = 0;
+  let opener: HTMLElement | null = null;
+
+  function show(p: number) {
+    pos = (p + order.length) % order.length;
+    slides.forEach((s) => s.classList.toggle("is-active", Number(s.dataset.slide) === order[pos]));
+    counter.textContent = `${pos + 1} / ${order.length}`;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      order = items.filter((li) => !li.hidden).map((li) => Number(li.querySelector<HTMLElement>("[data-open]")!.dataset.open));
+      opener = btn;
+      dialog.showModal();
+      show(order.indexOf(Number(btn.dataset.open)));
+    });
+  });
+
+  dialog.querySelector("[data-close]")!.addEventListener("click", () => dialog.close());
+  dialog.querySelector("[data-prev]")!.addEventListener("click", () => show(pos - 1));
+  dialog.querySelector("[data-next]")!.addEventListener("click", () => show(pos + 1));
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(pos - 1);
+    if (e.key === "ArrowRight") show(pos + 1);
+  });
+  dialog.addEventListener("close", () => opener?.focus());
+
+  // Swipe on touch screens
+  let startX = 0;
+  dialog.addEventListener("touchstart", (e) => (startX = e.touches[0].clientX), { passive: true });
+  dialog.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) show(pos + (dx < 0 ? 1 : -1));
+  });
+</script>

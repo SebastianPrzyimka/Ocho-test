@@ -1,0 +1,70 @@
+---
+/**
+ * Dojo table booking. Shows the official Dojo iframe only when configured in
+ * src/config/integrations.ts. The inside of the iframe can only be styled from
+ * Dojo's own settings; this site never tries to restyle it.
+ */
+import Button from "./Button.astro";
+import { dojo } from "../config/integrations";
+
+const embed = dojo.embed;
+---
+
+<div class="rounded-md border border-navy/15 bg-white/70">
+  {
+    embed ? (
+      <div data-dojo class="relative">
+        <div data-state="loading" class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center" role="status">
+          <span class="size-10 animate-spin rounded-full border-4 border-sand border-t-navy" aria-hidden="true" />
+          <p class="font-semibold text-navy">Loading table booking…</p>
+        </div>
+        <div data-state="slow" hidden class="p-4 text-center text-sm text-muted" role="status">
+          Booking is taking longer than usual to load{dojo.bookingUrl ? ". You can also book using the link below." : "."}
+        </div>
+        <iframe
+          src={embed.src}
+          title={embed.title}
+          class="relative block w-full rounded-md border-0"
+          style={`min-height: ${embed.minHeight ?? 720}px`}
+          loading="eager"
+          referrerpolicy="strict-origin-when-cross-origin"
+        />
+      </div>
+    ) : (
+      <div class="flex min-h-[50vh] flex-col items-center justify-center gap-5 border-2 border-dashed border-rust/40 p-8 text-center md:p-16">
+        <span class="tbc text-rust">Development placeholder</span>
+        <h2 class="display-md max-w-2xl text-navy">Table booking will appear here.</h2>
+        <p class="max-w-xl text-muted">
+          This test build is not connected to Dojo, so no reservation can be made on this page. The official Dojo
+          booking widget will appear here once its details are supplied.
+        </p>
+      </div>
+    )
+  }
+</div>
+
+{
+  dojo.bookingUrl && (
+    <div class="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+      <Button href={dojo.bookingUrl} variant="secondary" external arrow>
+        {dojo.bookingLabel}
+      </Button>
+      <p class="text-sm text-muted">Reservations are handled by Dojo.</p>
+    </div>
+  )
+}
+
+<script>
+  const shell = document.querySelector<HTMLElement>("[data-dojo]");
+  if (shell) {
+    const loading = shell.querySelector<HTMLElement>('[data-state="loading"]')!;
+    const slow = shell.querySelector<HTMLElement>('[data-state="slow"]')!;
+    const frame = shell.querySelector("iframe")!;
+    const timer = setTimeout(() => (slow.hidden = false), 15000);
+    frame.addEventListener("load", () => {
+      loading.hidden = true;
+      slow.hidden = true;
+      clearTimeout(timer);
+    });
+  }
+</script>

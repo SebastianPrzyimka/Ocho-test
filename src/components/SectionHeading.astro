@@ -1,0 +1,36 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  number?: string;
+  level?: "h1" | "h2";
+  align?: "left" | "center";
+  tone?: "dark" | "light";
+  size?: "lg" | "md";
+  class?: string;
+  id?: string;
+}
+const { eyebrow, title, number, level = "h2", align = "left", tone = "dark", size = "lg", class: className, id } =
+  Astro.props;
+const Tag = level;
+---
+
+<header class:list={["max-w-3xl", align === "center" && "mx-auto text-center", className]} data-reveal>
+  {
+    (eyebrow || number) && (
+      <p
+        class:list={[
+          "eyebrow mb-4 flex items-center gap-3",
+          align === "center" && "justify-center",
+          tone === "dark" ? "text-rust" : "text-apricot",
+        ]}
+      >
+        {number && <span class="font-display text-base font-medium tracking-normal italic">{number}</span>}
+        {number && eyebrow && <span class="h-px w-8 bg-current" aria-hidden="true" />}
+        {eyebrow}
+      </p>
+    )
+  }
+  <Tag id={id} class:list={[size === "lg" ? "display-lg" : "display-md", tone === "dark" ? "text-navy" : "text-ivory"]}>{title}</Tag>
+  <slot />
+</header>

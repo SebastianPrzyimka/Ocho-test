@@ -63,13 +63,16 @@ Only add dietary labels (V, VG, GF, DF) that the kitchen has confirmed. Once no 
 
 Use only photos Ocho owns or has permission to use. Do not copy them from Google, Tripadvisor, Facebook or Instagram.
 
-### Connecting Flipdish (Order Online)
+### Flipdish (Order Online)
 
-1. Get the official web ordering embed snippet from Flipdish (it contains Ocho's App ID).
-2. Ask Flipdish to whitelist every domain the site runs on (the test address and the final domain).
-3. In `src/config/integrations.ts`, fill in `flipdish.embed` with the values from the snippet: the `<div>`'s id and
-   attributes, and the `<script>`'s `src` and attributes. The script then loads on `/order/` only.
-4. Change `flipdish.fallbackUrl` to Flipdish's own ordering link before the domain moves, so it doesn't point back to this site.
+The official embed Flipdish sent for Ocho (`data-restaurant="fd14173"`) is set in `src/config/integrations.ts`
+(`flipdish.embed`). Its script loads on `/order/` only.
+
+- Flipdish must allow every domain the site runs on (the test address and the final domain), or the widget won't load.
+- Flipdish's documented options go into `containerAttributes`, e.g. `"data-theme": "dark"`. Their embed code generator
+  (flipdish.website) lists the rest, such as the space above the basket.
+- The menu, prices and collection times inside the widget are managed in the Flipdish portal, not here.
+- Before the domain moves, remove or replace `flipdish.fallbackUrl`, which points to the current Flipdish-hosted site.
 
 ### Connecting Dojo (Book a Table)
 

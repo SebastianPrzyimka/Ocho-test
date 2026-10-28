@@ -6,6 +6,7 @@
  */
 import Button from "./Button.astro";
 import { flipdish } from "../config/integrations";
+import { site } from "../config/site";
 
 const embed = flipdish.embed;
 ---
@@ -26,7 +27,10 @@ const embed = flipdish.embed;
         </div>
         <div data-state="error" hidden class="p-8 text-center" role="alert">
           <p class="font-display text-2xl font-semibold text-navy">Online ordering couldn't load.</p>
-          <p class="mt-2 text-muted">Please try again in a moment{flipdish.fallbackUrl ? ", or use the link below" : ""}.</p>
+          <p class="mt-2 text-muted">
+            Please refresh the page{flipdish.fallbackUrl ? ", or use the link below" : ""}. You can also call us on{" "}
+            <a class="font-bold text-navy underline underline-offset-4" href={`tel:${site.phone.e164}`}>{site.phone.display}</a>.
+          </p>
         </div>
         <div id={embed.containerId} {...embed.containerAttributes} />
       </div>
@@ -63,19 +67,19 @@ const embed = flipdish.embed;
     const fail = () => {
       loading.hidden = true;
       error.hidden = false;
+      shell.classList.remove("min-h-[70vh]");
     };
 
-    // Hide the loading state as soon as Flipdish puts something in its container.
+    // Hide the loading state as soon as Flipdish puts something in its container,
+    // or a few seconds after its script has loaded (in case it renders elsewhere).
+    // The error message only shows if the script itself cannot be loaded.
     const mo = new MutationObserver(() => {
       if (container.childElementCount > 0) {
         loading.hidden = true;
-        error.hidden = true;
         mo.disconnect();
-        clearTimeout(timer);
       }
     });
     mo.observe(container, { childList: true });
-    const timer = setTimeout(() => container.childElementCount === 0 && fail(), 20000);
 
     const script = document.createElement("script");
     script.src = shell.dataset.src!;
@@ -84,6 +88,7 @@ const embed = flipdish.embed;
       script.setAttribute(k, v);
     }
     script.onerror = fail;
+    script.onload = () => setTimeout(() => (loading.hidden = true), 8000);
     document.body.append(script);
   }
 </script>

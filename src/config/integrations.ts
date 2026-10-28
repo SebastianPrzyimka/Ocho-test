@@ -38,11 +38,18 @@ export interface DojoConfig {
 }
 
 export const flipdish: FlipdishConfig = {
-  embed: null,
-  // The current live site is run by Flipdish. Once the domain moves to this site,
-  // replace this with Flipdish's own ordering link so it doesn't point back here.
-  fallbackUrl: "https://www.ochoglasgow.co.uk/",
-  fallbackLabel: "Order on our current ordering site",
+  // From the embed code Flipdish sent for Ocho. Optional extra attribute documented by
+  // Flipdish: "data-theme": "dark" (the default light theme suits this site).
+  embed: {
+    containerId: "flipdish-menu",
+    containerAttributes: { "data-restaurant": "fd14173" },
+    scriptSrc: "https://web-order.flipdish.co/client/productionwlbuild/latest/static/js/main.js",
+    scriptAttributes: { id: "flipdish-script", type: "text/javascript", charset: "UTF-8" },
+  },
+  // Collection ordering on the current Flipdish-hosted site, shown as a backup link.
+  // Once the domain moves to this site, remove it or replace it so it doesn't point back here.
+  fallbackUrl: "https://www.ochoglasgow.co.uk/order#/restaurant/18357/collection/23820",
+  fallbackLabel: "Open ordering in a new tab",
 };
 
 export const dojo: DojoConfig = {

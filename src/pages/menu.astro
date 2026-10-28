@@ -4,7 +4,7 @@ import PageHero from "../components/PageHero.astro";
 import MenuSection from "../components/MenuSection.astro";
 import Button from "../components/Button.astro";
 import CtaBand from "../components/CtaBand.astro";
-import { menu, allergenNote, dietaryLabels } from "../content/menu";
+import { menu, allergenNote, dietaryLabels, menuNote } from "../content/menu";
 import { isProduction } from "../config/site";
 
 const hasPlaceholders = menu.some((c) => c.items.some((i) => i.placeholder));
@@ -12,12 +12,12 @@ const hasPlaceholders = menu.some((c) => c.items.some((i) => i.placeholder));
 
 <BaseLayout
   title="Menu"
-  description="Brunch, lunch, drinks and cocktails at Ocho, Speirs Wharf, Glasgow. Fresh, local and home made, with menus that change with the seasons."
+  description="The Ocho menu: breakfast, brunch, lunch, coffee and drinks at Speirs Wharf, Glasgow. Fresh, local and home made, with prices."
 >
   <PageHero
     eyebrow="Menu"
     title="Fresh, local, home made."
-    intro="Brunch, lunch, drinks and cocktails, made in our own kitchen. Our menus change with the seasons, so dishes and prices may vary."
+    intro="Breakfast, brunch and lunch, made fresh in house by our team of chefs, plus coffee and drinks. Our menu changes with the seasons."
   >
     <div class="mt-9 flex flex-col gap-3 sm:flex-row" data-reveal style="--reveal-delay:3">
       <Button href="/order/" size="lg" arrow>Order Online</Button>
@@ -56,6 +56,7 @@ const hasPlaceholders = menu.some((c) => c.items.some((i) => i.placeholder));
       )
     }
     {menu.map((category, index) => <MenuSection category={category} index={index} />)}
+    <p class="mb-10 border-t border-navy/15 pt-6 text-sm text-muted">{menuNote}</p>
 
     <aside class="mb-20 grid gap-8 rounded-md bg-linen p-8 md:grid-cols-2 md:p-12" aria-label="Allergens and dietary key">
       <div>

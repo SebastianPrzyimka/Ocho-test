@@ -14,7 +14,7 @@ const embed = dojo.embed;
   {
     embed ? (
       <div data-dojo class="relative">
-        <div data-state="loading" class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center" role="status">
+        <div data-state="loading" class="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-ivory p-8 text-center" role="status">
           <span class="size-10 animate-spin rounded-full border-4 border-sand border-t-navy" aria-hidden="true" />
           <p class="font-semibold text-navy">Loading table booking…</p>
         </div>

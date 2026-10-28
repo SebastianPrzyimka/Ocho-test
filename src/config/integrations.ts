@@ -52,10 +52,12 @@ export const flipdish: FlipdishConfig = {
   fallbackLabel: "Open ordering in a new tab",
 };
 
+const dojoBookingUrl =
+  "https://web.dojo.app/create_booking/vendor/FeXCzoinNufZMisWf62VlseH8SopiM4NIZg1ICtmCEs_restaurant";
+
 export const dojo: DojoConfig = {
-  embed: null,
-  // The existing booking page on the current live site. Replace with the direct
-  // Dojo link from the owner before launch, so it doesn't point back to this site.
-  bookingUrl: "https://www.ochoglasgow.co.uk/booktable",
-  bookingLabel: "Book on our current booking page",
+  // From Ocho's Dojo booking embed code.
+  embed: { type: "iframe", src: dojoBookingUrl, title: "Book a Table at Ocho Glasgow", minHeight: 800 },
+  bookingUrl: dojoBookingUrl,
+  bookingLabel: "Open booking in a new tab",
 };
